@@ -1,5 +1,8 @@
 plugins {
     id 'java'
+
+    // used to autogenerate Java classes from Avro schema definition
+    id 'com.commercehub.gradle.plugin.avro' version '0.9.1'
 }
 
 group 'com.nikolayvaklinov'
