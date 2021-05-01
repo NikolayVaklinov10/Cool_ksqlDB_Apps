@@ -10,7 +10,7 @@ public class CountTransformer
 
     @Override
     public void init(ProcessorContext context) {
-        this.store = (KeyValueStore<String, Long>) context.getStateStore("my-store");
+        this.store = context.getStateStore("my-store");
     }
 
     @Override
