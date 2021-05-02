@@ -1,22 +1,32 @@
 plugins {
     id 'java'
 
-    // used to autogenerate Java classes from Avro schema definition
-    id 'com.commercehub.gradle.plugin.avro' version '0.9.1'
+//    // used to autogenerate Java classes from Avro schema definition
+//    id 'com.commercehub.gradle.plugin.avro' version '0.9.1'
+}
+
+ext {
+    opencensusVersion = '0.26.0'
+    simpleclientVersion = '0.6.0'
+    prometheusJmxExporterVersion='0.14.0'
 }
 
 group 'com.nikolayvaklinov'
 version '1.0'
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
     // The testing dependencies
     testImplementation group: 'org.apache.kafka', name: 'kafka-streams-test-utils', version: '2.7.0'
     testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.15.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.6.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 
     // The Kafka dependencies
@@ -31,12 +41,18 @@ dependencies {
     // required for JSON serializer
     implementation 'com.google.code.gson:gson:2.8.5'
 
-    // required for schema-registry-compatible Avro Serdes
-    implementation ('io.confluent:kafka-streams-avro-serde:6.0.1') {
-        // this was required for the 2.7 upgrade, since the kafka-streams-avro-serde
-        // pulls in an incompatible transitive dependency (org.apache.kafka:kafka-clients:6.0.1-ccs)
-        exclude group: 'org.apache.kafka', module: 'kafka-clients'
-    }
+    // observability dependencies
+    implementation "io.prometheus.jmx:jmx_prometheus_httpserver:${prometheusJmxExporterVersion}"
+    implementation "io.opencensus:opencensus-api:${opencensusVersion}"
+    implementation "io.opencensus:opencensus-impl:${opencensusVersion}"
+    implementation "io.opencensus:opencensus-exporter-stats-prometheus:${opencensusVersion}"
+
+//    // required for schema-registry-compatible Avro Serdes
+//    implementation ('io.confluent:kafka-streams-avro-serde:6.0.1') {
+//        // this was required for the 2.7 upgrade, since the kafka-streams-avro-serde
+//        // pulls in an incompatible transitive dependency (org.apache.kafka:kafka-clients:6.0.1-ccs)
+//        exclude group: 'org.apache.kafka', module: 'kafka-clients'
+//    }
 
 
 
